@@ -7,7 +7,8 @@ class User(AbstractUser):
     username = models.CharField(max_length=100, unique=True)
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=100,unique=True)
-    otp = models.CharField(unique=True,max_length=100)
+    otp = models.CharField(max_length=100,null=True,blank=True)
+    refresh_token = models.CharField(max_length=100,null=True,blank=True)
     
     # email would be required for login
     USERNAME_FIELD = 'email'
@@ -32,7 +33,6 @@ class Profile(models.Model):
     full_name = models.CharField(max_length=100)
     country = models.CharField(max_length=100,null=True,blank=True)
     about = models.TextField(null=True,blank=True)
-
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
