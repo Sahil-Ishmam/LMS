@@ -2,6 +2,10 @@ from pathlib import Path
 import os
 from datetime import timedelta
 
+from environs import Env
+env = Env()
+env.read_env()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -33,6 +37,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders', # this one is for taking request from other server(frontend) basically django block other server request so we need to use it
+
+    'anymail',# package to send email
+
+    'drf_yasg',
     
 
 ]
@@ -122,7 +130,12 @@ STATIC_ROOT = BASE_DIR/'templates'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR/'media'
 
-AUTH_USER_MODEL = 'userauths.User' 
+AUTH_USER_MODEL = 'userauths.User'
+
+
+# MAILGUN_SECRET_KEY = env("MAILGUN_SECRET_KEY")
+# MAILERESEND_API_TOKEN = env("MAILERESEND_API_TOKEN")
+# MAILGUN_SENDER_DOMAIN = env("MAILGUN_SENDER_DOMAIN")
 
 
 # Default primary key field type
