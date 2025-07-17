@@ -1,9 +1,10 @@
 import { Navigate } from "react-router-dom";
 import { useAuthStore } from "../store/auth";
-import { Children } from "react";
+import { children } from "react";
 
-const PrivateRoute = ({ Children }) => {
+const PrivateRoute = ({ children }) => {
   const loggedIn = useAuthStore((state) => state.isLoggedIn)();
-  return loggedIn ? <>{Children}</> : <Navigate to="/login/" />;
+  return loggedIn ? <>{children}</> : <Navigate to="/login/" />;
 };
 export default PrivateRoute;
+
