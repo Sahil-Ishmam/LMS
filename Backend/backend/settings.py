@@ -39,10 +39,7 @@ INSTALLED_APPS = [
     'corsheaders', # this one is for taking request from other server(frontend) basically django block other server request so we need to use it
 
     'anymail',# package to send email
-
     'drf_yasg',
-    
-
 ]
 
 MIDDLEWARE = [
@@ -54,7 +51,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-
 ]
 
 ROOT_URLCONF = 'backend.urls'
