@@ -68,7 +68,6 @@ NOTIFICATION_TYPE = (
 
 class Teacher(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE,blank=True,null=True)
-
     image = models.ImageField(upload_to='course-file',blank=True,null=True,default="default.jpg")
     full_name = models.CharField(max_length=100)
     bio = models.CharField(max_length=500,blank=True,null=True)
@@ -120,14 +119,11 @@ class Course(models.Model):
     title = models.CharField(max_length=300)
     description = models.TextField(null=True,blank=True)
     price = models.DecimalField(max_digits=12,decimal_places=2,default=0.00)
-
     language = models.CharField(choices=LANGUAGE,default="English",max_length=100)
     level = models.CharField(choices=LEVEL,default="Beginner",max_length=100)
     platform_status = models.CharField(choices=PLATFORM_STATUS,default="Published",max_length=40)
-    teacher_status = models.CharField(choices=TEACHER_STATUS,default="Published",max_length=40)
-
+    teacher_course_status = models.CharField(choices=TEACHER_STATUS,default="Published",max_length=40)
     course_id = ShortUUIDField(unique=True,length =6,max_length=20,alphabet="1234567890")
-
     slug = models.SlugField(unique=True,null=True)
     date = models.DateTimeField(default=timezone.now)
 
@@ -148,7 +144,7 @@ class Course(models.Model):
         return VariantItem.objects.filter(variant__course=self)
     
 
-    def lecture(self):
+    def lectures(self):
         return VariantItem.objects.filter(variant__course=self)
     
     def average_rating(self):
@@ -158,7 +154,7 @@ class Course(models.Model):
     def rating_count(self):
         return Review.objects.filter(course=self, active=True).count()
 
-    def review(self):
+    def reviews(self):
         return Review.objects.filter(course=self, active=True)
     
 class Variant(models.Model):
