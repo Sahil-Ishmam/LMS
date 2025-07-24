@@ -64,19 +64,16 @@ NOTIFICATION_TYPE = (
     ("Course Published","Course Published"),
 )
 
-
-
 class Teacher(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE,blank=True,null=True)
-    image = models.ImageField(upload_to='course-file',blank=True,null=True,default="default.jpg")
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.FileField(upload_to="course-file", blank=True, null=True, default="default.jpg")
     full_name = models.CharField(max_length=100)
-    bio = models.CharField(max_length=500,blank=True,null=True)
-    facebook = models.URLField(null=True,blank=True)
-    twitter = models.URLField(null=True,blank=True)
-    linkedin = models.URLField(null=True,blank=True)
-    about = models.TextField(null=True,blank=True)
-    country = models.CharField(max_length=100,blank=True,null=True)
-
+    bio = models.CharField(max_length=100, null=True, blank=True)
+    facebook = models.URLField(null=True, blank=True)
+    twitter = models.URLField(null=True, blank=True)
+    linkedin = models.URLField(null=True, blank=True)
+    about = models.TextField(null=True, blank=True)
+    country = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.full_name
@@ -87,14 +84,17 @@ class Teacher(models.Model):
     def courses(self):
         return Course.objects.filter(teacher=self)
     
-
     def review(self):
-        return Course.objects.filter(teacher=self).count()
-    
+        return Course.objects.filter(teacher=self).count()  
+
+
+
+
 class Category(models.Model):
     title = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='course-file',blank=True,null=True,default="default.jpg")
-    slug = models.SlugField(unique=True,null=True,blank=True)
+    image = models.FileField(upload_to="course-file", default="category.jpg", null=True, blank=True)
+    active = models.BooleanField(default=True)
+    slug = models.SlugField(unique=True, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = "Category"
@@ -106,14 +106,15 @@ class Category(models.Model):
     def course_count(self):
         return Course.objects.filter(category=self).count()
     
-    def save(self,*args, **kwargs):
-        if self.slug=="" or self.slug==None:
+    def save(self, *args, **kwargs):
+        if self.slug == "" or self.slug == None:
             self.slug = slugify(self.title)
-        super(Category,self).save(*args, **kwargs)
-            
+        super(Category, self).save(*args, **kwargs)
+       
+                
 class Course(models.Model):
     category = models.ForeignKey(Category,on_delete=models.SET_NULL,blank=True,null=True)
-    teacher = models.ForeignKey(Teacher,on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher,on_delete=models.SET_NULL,blank=True,null=True)
     file = models.FileField(upload_to='course-file',blank=True,null=True)
     image = models.FileField(upload_to="course-file",blank=True,null=True)
     title = models.CharField(max_length=300)
@@ -124,7 +125,7 @@ class Course(models.Model):
     platform_status = models.CharField(choices=PLATFORM_STATUS,default="Published",max_length=40)
     teacher_course_status = models.CharField(choices=TEACHER_STATUS,default="Published",max_length=40)
     course_id = ShortUUIDField(unique=True,length =6,max_length=20,alphabet="1234567890")
-    slug = models.SlugField(unique=True,null=True)
+    slug = models.SlugField(unique=True,null=True,blank=True)
     date = models.DateTimeField(default=timezone.now)
 
 

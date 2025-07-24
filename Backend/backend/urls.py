@@ -44,6 +44,7 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     path('api/v1/',include('api.urls')),
+    path('schema-viewer/', include('schema_viewer.urls')),
 ]
 
 

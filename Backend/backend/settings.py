@@ -40,6 +40,9 @@ INSTALLED_APPS = [
 
     'anymail',# package to send email
     'drf_yasg',
+
+
+    "schema_viewer",
 ]
 
 MIDDLEWARE = [

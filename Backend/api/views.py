@@ -5,6 +5,10 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 # Create your views here.
 from rest_framework import generics,status
 from userauths.models import User,Profile
+from api  import models as api_models
+
+
+
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
@@ -75,3 +79,7 @@ class PasswordChangeAPIView(generics.CreateAPIView):
             return Response({"message":"User Doesn't Exists"},status=status.HTTP_404_NOT_FOUND)
         
 
+class CategoryListAPIView(generics.ListAPIView):
+    queryset = api_models.Category.objects.filter(active=True)  
+    serializer_class = api_serializer.CategorySerializer
+    permission_classes = [AllowAny]
