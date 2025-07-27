@@ -27,7 +27,7 @@ LEVEL = (
 )
 
 
-TEACHER_STATUS = (
+TEACHER_COURSE_STATUS = (
     ("Draft","Draft"),
     ("Disabled","Disabled"),
     ("Published","Published"),
@@ -123,7 +123,7 @@ class Course(models.Model):
     language = models.CharField(choices=LANGUAGE,default="English",max_length=100)
     level = models.CharField(choices=LEVEL,default="Beginner",max_length=100)
     platform_status = models.CharField(choices=PLATFORM_STATUS,default="Published",max_length=40)
-    teacher_course_status = models.CharField(choices=TEACHER_STATUS,default="Published",max_length=40)
+    teacher_course_status = models.CharField(choices=TEACHER_COURSE_STATUS,default="Published",max_length=40)
     course_id = ShortUUIDField(unique=True,length =6,max_length=20,alphabet="1234567890")
     slug = models.SlugField(unique=True,null=True,blank=True)
     date = models.DateTimeField(default=timezone.now)
@@ -245,8 +245,9 @@ class Cart(models.Model):
     tax_fee = models.DecimalField(max_digits=12,default=0.00,decimal_places=2)
     total = models.DecimalField(max_digits=12,default=0.00,decimal_places=2)
     country = models.CharField(max_length=100,null=True,blank=True)
-    cart_id = ShortUUIDField(unique=True,length =6,max_length=20,alphabet="1234567890")
+    cart_id = ShortUUIDField(length =6,max_length=20,alphabet="1234567890")
     date = models.DateTimeField(default=timezone.now)
+    
 
 
     def __str__(self):
@@ -261,7 +262,7 @@ class CartOrder(models.Model):
     initial_total = models.DecimalField(max_digits=12,default=0.00,decimal_places=2)
     saved = models.DecimalField(max_digits=12,default=0.00,decimal_places=2)
     payment_status = models.CharField(choices=PAYMENT_STATUS,default = "Processing",max_length=40)
-    coupon = models.ManyToManyField("api.Coupon",blank=True)
+    coupons = models.ManyToManyField("api.Coupon",blank=True)
     full_name = models.CharField(max_length=100,null=True,blank=True)
     email = models.CharField(max_length=100,null=True,blank=True)
     country = models.CharField(max_length=100,null=True,blank=True)
@@ -281,16 +282,20 @@ class CartOrder(models.Model):
         return self.oid;
 
 class CartOrderItem(models.Model):
-    teacher = models.ForeignKey(Teacher,on_delete=models.CASCADE)
     order = models.ForeignKey(CartOrder,on_delete=models.CASCADE,related_name="order_item")
     course = models.ForeignKey(Course,on_delete=models.CASCADE,related_name="order_item")
+    teacher = models.ForeignKey(Teacher,on_delete=models.CASCADE)
+    
     tax_fee = models.DecimalField(max_digits=12,default=0.00,decimal_places=2)
     total = models.DecimalField(max_digits=12,default=0.00,decimal_places=2)
     initial_total = models.DecimalField(max_digits=12,default=0.00,decimal_places=2)
     saved = models.DecimalField(max_digits=12,default=0.00,decimal_places=2)
-    payment_status = models.CharField(choices=PAYMENT_STATUS,default = "Processing",max_length=40)
-    coupon = models.ForeignKey("api.Coupon",blank=True,null=True,on_delete=models.SET_NULL)
+    coupons = models.ForeignKey("api.Coupon",blank=True,null=True,on_delete=models.SET_NULL)
     applied_coupon = models.BooleanField(default=False)
+    
+
+    # price = models.DecimalField(max_digits=20,default=0.00,decimal_places=2)
+    # payment_status = models.CharField(choices=PAYMENT_STATUS,default = "Processing",max_length=40)
     oid =ShortUUIDField(unique=True,length =6,max_length=20,alphabet="1234567890")
     date = models.DateTimeField(default=timezone.now)
 
@@ -331,7 +336,7 @@ class CompletedLesson(models.Model):
     
 class EnrolledCourse(models.Model):
     course = models.ForeignKey(Course,on_delete=models.CASCADE)
-    teacher = models.ForeignKey(Teacher,on_delete=models.CASCADE,null=True,blank=True)
+    teacher = models.ForeignKey(Teacher,on_delete=models.SET_NULL,null=True,blank=True)
     user = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
     order_item = models.ForeignKey(CartOrderItem,on_delete=models.CASCADE)
     enrollment_id = ShortUUIDField(unique=True,length =6,max_length=20,alphabet="1234567890")
@@ -426,7 +431,4 @@ class Country(models.Model):
 
     def __str__(self):
         return self.name
-
-
-
-
+    
