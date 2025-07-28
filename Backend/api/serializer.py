@@ -344,3 +344,5 @@ class TeacherSummarySerializer(serializers.Serializer):
     monthly_revenue = serializers.IntegerField(default=0)
 
 
+class FileUploadSerializer(serializers.Serializer):
+    file = serializers.FileField(required=True)
