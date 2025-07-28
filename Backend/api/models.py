@@ -1,11 +1,18 @@
 from django.db import models
 from userauths.models import User,Profile
+
+
+
 from django.utils.text import slugify
 from django.utils import timezone
 from moviepy import VideoFileClip
 from shortuuid.django_fields import ShortUUIDField
-
 import math
+
+
+
+
+
 
 
 
@@ -75,6 +82,8 @@ class Teacher(models.Model):
     about = models.TextField(null=True, blank=True)
     country = models.CharField(max_length=100, null=True, blank=True)
 
+
+
     def __str__(self):
         return self.full_name
     
@@ -85,7 +94,7 @@ class Teacher(models.Model):
         return Course.objects.filter(teacher=self)
     
     def review(self):
-        return Course.objects.filter(teacher=self).count()  
+        return Course.objects.filter(teacher=self).count()
 
 
 
@@ -125,6 +134,7 @@ class Course(models.Model):
     platform_status = models.CharField(choices=PLATFORM_STATUS,default="Published",max_length=40)
     teacher_course_status = models.CharField(choices=TEACHER_COURSE_STATUS,default="Published",max_length=40)
     course_id = ShortUUIDField(unique=True,length =6,max_length=20,alphabet="1234567890")
+    featured = models.BooleanField(default=False)
     slug = models.SlugField(unique=True,null=True,blank=True)
     date = models.DateTimeField(default=timezone.now)
 
@@ -135,21 +145,21 @@ class Course(models.Model):
 
     def save(self,*args, **kwargs):
         if self.slug=="" or self.slug==None:
-            self.slug = slugify(self.title)
+            self.slug = slugify(self.title) + str(self.pk)
         super(Course,self).save(*args, **kwargs)
 
     def students(self):
         return EnrolledCourse.objects.filter(course=self)
     
     def curriculum(self):
-        return VariantItem.objects.filter(variant__course=self)
+        return VariantItem.objects.filter(course=self)
     
 
     def lectures(self):
         return VariantItem.objects.filter(variant__course=self)
     
     def average_rating(self):
-        average_rating = Review.objects.filter(course=self).aggregate(avg_rating=models.Avg("rating"))
+        average_rating = Review.objects.filter(course=self,active=True).aggregate(avg_rating=models.Avg("rating"))
         return average_rating['avg_rating']
     
     def rating_count(self):
@@ -169,9 +179,12 @@ class Variant(models.Model):
     
     def variant_item(self):
         return VariantItem.objects.filter(variant=self)
+    
+    def items(self):
+        return VariantItem.objects.filter(variant=self)
 
 class VariantItem(models.Model):
-    variant = models.ForeignKey(Variant,on_delete=models.CASCADE,related_name="variant_item")
+    variant = models.ForeignKey(Variant,on_delete=models.CASCADE,related_name="variant_items")
     title = models.CharField(max_length=500)
     description = models.TextField(null=True,blank=True)
     variant_item_id  = ShortUUIDField(unique=True,length =6,max_length=20,alphabet="1234567890")
@@ -286,6 +299,7 @@ class CartOrderItem(models.Model):
     course = models.ForeignKey(Course,on_delete=models.CASCADE,related_name="order_item")
     teacher = models.ForeignKey(Teacher,on_delete=models.CASCADE)
     
+    price = models.DecimalField(max_digits=12,default=0.00,decimal_places=2)
     tax_fee = models.DecimalField(max_digits=12,default=0.00,decimal_places=2)
     total = models.DecimalField(max_digits=12,default=0.00,decimal_places=2)
     initial_total = models.DecimalField(max_digits=12,default=0.00,decimal_places=2)
@@ -304,7 +318,7 @@ class CartOrderItem(models.Model):
         ordering = ['-date']
     
     def order_id(self):
-        return f"order id ${self.order.oid}"
+        return f"order id #{self.order.oid}"
          
     
 

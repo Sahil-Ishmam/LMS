@@ -240,6 +240,7 @@ class CreateOrderAPIView(generics.CreateAPIView):
 
 
         if user_id != 0:
+            # user = User.objects.filter(id=user_id)
             user = User.objects.filter(id=user_id).first()
         else:
             user = None

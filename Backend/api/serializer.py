@@ -81,7 +81,7 @@ class TeacherSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
-        fields = ['title','image','slug','course_count']
+        fields = ['id','title','image','slug','course_count']
         model = api_models.Category
 
 
@@ -91,13 +91,32 @@ class VariantItemSerializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'
         model = api_models.VariantItem
+    
+    def __init__(self, *args, **kwargs):
+        super(VariantItemSerializer,self).__init__(*args,**kwargs)
+        request = self.context.get("request")
+        if request and request.method == "POST":
+            self.Meta.depth = 0
+        else:
+            self.Meta.depth = 3
+
 
 
 class VariantSerializer(serializers.ModelSerializer):
     variant_items = VariantItemSerializer(many=True)
+    items = VariantItemSerializer(many=True)
     class Meta:
         fields = '__all__'
         model = api_models.Variant
+
+    def __init__(self, *args, **kwargs):
+        super(VariantSerializer, self).__init__(*args, **kwargs)
+        request = self.context.get("request")
+        if request and request.method == "POST":
+            self.Meta.depth = 0
+        else:
+            self.Meta.depth = 3
+
 
 
 
@@ -129,11 +148,28 @@ class CartSerializer(serializers.ModelSerializer):
         model = api_models.Cart
 
 
+    def __init__(self, *args, **kwargs):
+        super(CartSerializer, self).__init__(*args, **kwargs)
+        request = self.context.get("request")
+        if request and request.method == "POST":
+            self.Meta.depth = 0
+        else:
+            self.Meta.depth = 3
+
+
 class CartOrderItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = '__all__'
         model = api_models.CartOrderItem
+    
+    def __init__(self, *args, **kwargs):
+        super(CartOrderItemSerializer, self).__init__(*args, **kwargs)
+        request = self.context.get("request")
+        if request and request.method == "POST":
+            self.Meta.depth = 0
+        else:
+            self.Meta.depth = 3
 
 
 class CartOrderSerializer(serializers.ModelSerializer):
@@ -143,15 +179,17 @@ class CartOrderSerializer(serializers.ModelSerializer):
         fields = '__all__'
         model = api_models.CartOrder
 
+    def __init__(self, *args, **kwargs):
+        super(CartOrderSerializer, self).__init__(*args, **kwargs)
+        request = self.context.get("request")
+        if request and request.method == "POST":
+            self.Meta.depth = 0
+        else:
+            self.Meta.depth = 3
 
 
 
 
-class CertificateSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        fields = '__all__'
-        model = api_models.Certificate
 
 
 class CertificateSerializer(serializers.ModelSerializer):
@@ -166,6 +204,14 @@ class CompletedLessonSerializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'
         model = api_models.CompletedLesson
+    
+    def __init__(self, *args, **kwargs):
+        super(CompletedLessonSerializer, self).__init__(*args, **kwargs)
+        request = self.context.get("request")
+        if request and request.method == "POST":
+            self.Meta.depth = 0
+        else:
+            self.Meta.depth = 3
 
 
 class NoteSerializer(serializers.ModelSerializer):
@@ -180,6 +226,14 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'
         model = api_models.Review
+
+    def __init__(self, *args, **kwargs):
+        super(ReviewSerializer, self).__init__(*args, **kwargs)
+        request = self.context.get("request")
+        if request and request.method == "POST":
+            self.Meta.depth = 0
+        else:
+            self.Meta.depth = 3
 
 class NotificationSerializer(serializers.ModelSerializer):
 
@@ -201,6 +255,14 @@ class WishListSerializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'
         model = api_models.WishList
+    
+    def __init__(self, *args, **kwargs):
+        super(WishlistSerializer, self).__init__(*args, **kwargs)
+        request = self.context.get("request")
+        if request and request.method == "POST":
+            self.Meta.depth = 0
+        else:
+            self.Meta.depth = 3
 
 
 
@@ -228,13 +290,14 @@ class EnrolledCourseSerializer(serializers.ModelSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    students = EnrolledCourseSerializer(many=True)
-    curriculum = VariantItemSerializer(many=True)
-    lectures = VariantItemSerializer(many=True)
-
+    students = EnrolledCourseSerializer(many=True,required=False, read_only=True,)
+    curriculum = VariantItemSerializer(many=True,required=False, read_only=True,)
+    lectures = VariantItemSerializer(many=True,required=False, read_only=True,)
+    reviews = ReviewSerializer(many=True,required=False, read_only=True,)
 
     class Meta:
         fields = [
+            "id",
             "category",
             "teacher",
             "file",
@@ -246,6 +309,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "level",
             "platform_status",
             "teacher_course_status",
+            "featured",
             "course_id",
             "slug",
             "date",
@@ -257,4 +321,26 @@ class CourseSerializer(serializers.ModelSerializer):
             "reviews",
         ]
         model = api_models.Course
+    
+    def __init__(self, *args, **kwargs):
+        super(CourseSerializer, self).__init__(*args, **kwargs)
+        request = self.context.get("request")
+        if request and request.method == "POST":
+            self.Meta.depth = 0
+        else:
+            self.Meta.depth = 3
+
+
+class StudentSummarySerializer(serializers.Serializer):
+    total_courses = serializers.IntegerField(default=0)
+    completed_lessons = serializers.IntegerField(default=0)
+    achieved_certificates = serializers.IntegerField(default=0)
+
+
+class TeacherSummarySerializer(serializers.Serializer):
+    total_courses = serializers.IntegerField(default=0)
+    total_students = serializers.IntegerField(default=0)
+    total_revenue = serializers.IntegerField(default=0)
+    monthly_revenue = serializers.IntegerField(default=0)
+
 
