@@ -260,6 +260,8 @@ class Cart(models.Model):
     country = models.CharField(max_length=100,null=True,blank=True)
     cart_id = ShortUUIDField(length =6,max_length=20,alphabet="1234567890")
     date = models.DateTimeField(default=timezone.now)
+    initial_total = models.DecimalField(max_digits=12, default=0.00, decimal_places=2)
+
     
 
 
