@@ -137,6 +137,18 @@ AUTH_USER_MODEL = 'userauths.User'
 # MAILGUN_SENDER_DOMAIN = env("MAILGUN_SENDER_DOMAIN")
 
 
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
+STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY")
+
+# PAYPAL_CLIENT_ID = env("PAYPAL_CLIENT_ID")
+ 
+
+
+FRONTEND_SITE_URL  = env("FRONTEND_SITE_URL")
+# BACKEND_SITE_URL  = env("BACKEND_SITE_URL")
+
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

@@ -19,6 +19,11 @@ function App() {
           <Route path="/logout/" element={<Logout />} />
           <Route path="/forgot-password/" element={<ForgotPassword />} />
           <Route path="/create-new-password/" element={<CreateNewPassword />} />
+
+
+
+          {/* Base Routes */}
+          
         </Routes>
       </MainWrapper>
     </BrowserRouter>

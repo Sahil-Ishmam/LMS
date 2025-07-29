@@ -306,7 +306,7 @@ class CartOrderItem(models.Model):
     total = models.DecimalField(max_digits=12,default=0.00,decimal_places=2)
     initial_total = models.DecimalField(max_digits=12,default=0.00,decimal_places=2)
     saved = models.DecimalField(max_digits=12,default=0.00,decimal_places=2)
-    coupons = models.ForeignKey("api.Coupon",blank=True,null=True,on_delete=models.SET_NULL)
+    coupons = models.ManyToManyField("api.Coupon",blank=True)
     applied_coupon = models.BooleanField(default=False)
     
 
