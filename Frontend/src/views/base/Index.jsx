@@ -11,7 +11,11 @@ function Index() {
   const fetchCourse = async () => {
     setIsLoading(true);
     try {
+<<<<<<< HEAD
       await useAxios.get(`/course/course-list/`).then((res) => {
+=======
+      await useAxios.get(/course/course-list/).then((res) => {
+>>>>>>> 238027fe9da0790d7d48e497d2a55571eae169fe
         console.log(res.data);
         setIsLoading(false);
       });
@@ -159,7 +163,11 @@ function Index() {
                 <div className="col">
                   {/* Card */}
                   <div className="card card-hover">
+<<<<<<< HEAD
                     <Link to={`/course-detail/slug/`}>
+=======
+                    <Link to={/course-detail/slug/}>
+>>>>>>> 238027fe9da0790d7d48e497d2a55571eae169fe
                       <img
                         src="https://geeksui.codescandy.com/geeks/assets/images/course/course-css.jpg"
                         alt="course"
@@ -181,7 +189,11 @@ function Index() {
                       </div>
                       <h4 className="mb-2 text-truncate-line-2 ">
                         <Link
+<<<<<<< HEAD
                           to={`/course-detail/slug/`}
+=======
+                          to={/course-detail/slug/}
+>>>>>>> 238027fe9da0790d7d48e497d2a55571eae169fe
                           className="text-inherit text-decoration-none text-dark fs-5"
                         >
                           How to easily create a website with JavaScript
@@ -244,7 +256,11 @@ function Index() {
                     </li>
                   </ul>
                   <ul className="pagination">
+<<<<<<< HEAD
                     <li className={`totalPages`}>
+=======
+                    <li className={totalPages}>
+>>>>>>> 238027fe9da0790d7d48e497d2a55571eae169fe
                       <button className="page-link ms-1">
                         Next
                         <i className="ci-arrow-right ms-3" />
@@ -256,7 +272,11 @@ function Index() {
                 <div className="col">
                   {/* Card */}
                   <div className="card card-hover">
+<<<<<<< HEAD
                     <Link to={`/course-detail/slug/`}>
+=======
+                    <Link to={/course-detail/slug/}>
+>>>>>>> 238027fe9da0790d7d48e497d2a55571eae169fe
                       <img
                         src="https://geeksui.codescandy.com/geeks/assets/images/course/course-angular.jpg"
                         alt="course"
@@ -273,7 +293,11 @@ function Index() {
                       </div>
                       <h4 className="mb-2 text-truncate-line-2 ">
                         <Link
+<<<<<<< HEAD
                           to={`/course-detail/slug/`}
+=======
+                          to={/course-detail/slug/}
+>>>>>>> 238027fe9da0790d7d48e497d2a55571eae169fe
                           className="text-inherit text-decoration-none text-dark fs-5"
                         >
                           How to easily create a website with JavaScript
@@ -318,7 +342,11 @@ function Index() {
                 <div className="col">
                   {/* Card */}
                   <div className="card card-hover">
+<<<<<<< HEAD
                     <Link to={`/course-detail/slug/`}>
+=======
+                    <Link to={/course-detail/slug/}>
+>>>>>>> 238027fe9da0790d7d48e497d2a55571eae169fe
                       <img
                         src="https://geeksui.codescandy.com/geeks/assets/images/course/course-react.jpg"
                         alt="course"
@@ -335,7 +363,11 @@ function Index() {
                       </div>
                       <h4 className="mb-2 text-truncate-line-2 ">
                         <Link
+<<<<<<< HEAD
                           to={`/course-detail/slug/`}
+=======
+                          to={/course-detail/slug/}
+>>>>>>> 238027fe9da0790d7d48e497d2a55571eae169fe
                           className="text-inherit text-decoration-none text-dark fs-5"
                         >
                           Learn React.Js for Beginners from Start to Finish
@@ -380,7 +412,11 @@ function Index() {
                 <div className="col">
                   {/* Card */}
                   <div className="card card-hover">
+<<<<<<< HEAD
                     <Link to={`/course-detail/slug/`}>
+=======
+                    <Link to={/course-detail/slug/}>
+>>>>>>> 238027fe9da0790d7d48e497d2a55571eae169fe
                       <img
                         src="https://geeksui.codescandy.com/geeks/assets/images/course/course-python.jpg"
                         alt="course"
@@ -397,7 +433,11 @@ function Index() {
                       </div>
                       <h4 className="mb-2 text-truncate-line-2 ">
                         <Link
+<<<<<<< HEAD
                           to={`/course-detail/slug/`}
+=======
+                          to={/course-detail/slug/}
+>>>>>>> 238027fe9da0790d7d48e497d2a55571eae169fe
                           className="text-inherit text-decoration-none text-dark fs-5"
                         >
                           How to easily create a website with JavaScript
@@ -552,7 +592,15 @@ function Index() {
                         <div className="card">
                           <div className="card-body text-center p-6">
                             {/* img */}
+<<<<<<< HEAD
                             <img src="" alt="avatar" className="avatar" />
+=======
+                            <img
+                              src="../../assets/images/avatar/avatar-1.jpg"
+                              alt="avatar"
+                              className="avatar avatar-lg rounded-circle"
+                            />
+>>>>>>> 238027fe9da0790d7d48e497d2a55571eae169fe
                             <p className="mb-0 mt-3">
                               “The generated lorem Ipsum is therefore always
                               free from repetition, injected humour, or words
@@ -793,4 +841,8 @@ function Index() {
   );
 }
 
+<<<<<<< HEAD
 export default Index;
+=======
+export default Index;
+>>>>>>> 238027fe9da0790d7d48e497d2a55571eae169fe

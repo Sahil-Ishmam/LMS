@@ -73,7 +73,7 @@ function Dashboard() {
                 <div className="card-header">
                   <h3 className="mb-0">Courses</h3>
                   <span>
-                    Start watching courses now from your dashboard page...
+                    Start watching courses now from your dashboard page.....
                   </span>
                 </div>
                 <div className="card-body">
