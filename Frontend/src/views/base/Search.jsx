@@ -1,9 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import BaseHeader from "../partials/BaseHeader";
 import BaseFooter from "../partials/BaseFooter";
 import { Link } from "react-router-dom";
 
 function Search() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 5; // For example, assume there are 5 pages of results
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
   return (
     <>
       <BaseHeader />
@@ -15,7 +35,7 @@ function Search() {
             <div className="col-12">
               <div className="mb-6">
                 <h2 className="mb-1 h1">
-                  Showing Results for "LMS System Using Django"
+                  Showing Results for "{searchQuery || "LMS System Using Django"}"
                 </h2>
               </div>
             </div>
@@ -25,8 +45,8 @@ function Search() {
                   type="text"
                   className="form-control lg mt-3"
                   placeholder="Search Courses..."
-                  name=""
-                  id=""
+                  value={searchQuery}
+                  onChange={handleSearchChange}
                 />
               </div>
             </div>
@@ -108,25 +128,31 @@ function Search() {
                 </div>
               </div>
 
-              <nav className="d-flex mt-5">
+              <nav className="d-flex mt-5" aria-label="Course Pagination">
                 <ul className="pagination">
-                  <li className="">
-                    <button className="page-link me-1">
-                      <i className="ci-arrow-left me-2" />
-                      Previous
+                  <li className="page-item">
+                    <button
+                      className="page-link"
+                      aria-label="Previous"
+                      onClick={goToPreviousPage}
+                    >
+                      <i className="ci-arrow-left me-2" /> Previous
                     </button>
                   </li>
                 </ul>
                 <ul className="pagination">
-                  <li key={1} className="active">
-                    <button className="page-link">1</button>
+                  <li key={currentPage} className="active">
+                    <button className="page-link">{currentPage}</button>
                   </li>
                 </ul>
                 <ul className="pagination">
-                  <li className={`totalPages`}>
-                    <button className="page-link ms-1">
-                      Next
-                      <i className="ci-arrow-right ms-3" />
+                  <li className="page-item">
+                    <button
+                      className="page-link"
+                      aria-label="Next"
+                      onClick={goToNextPage}
+                    >
+                      Next <i className="ci-arrow-right ms-3" />
                     </button>
                   </li>
                 </ul>
