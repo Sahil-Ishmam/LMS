@@ -1,11 +1,11 @@
+from django.contrib.auth.password_validation import validate_password
+from api import models as api_models
 from rest_framework import serializers
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from userauths.models import Profile,User
-from django.contrib.auth.password_validation import validate_password
-from api import models as api_models
 
-
+# review ✅
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -17,20 +17,26 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['full_name'] = user.full_name
         # ...
 
+        try:
+            token['teacher_id'] = user.teacher.id
+        except:
+            token['teacher_id'] = 0
+
         return token
 
-
+# review ✅
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
-    
+
+# review ✅
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = '__all__'
     
-
+# review ✅
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True,required=True,validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
@@ -57,7 +63,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return user
     
-
+# review ✅
 class TeacherSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -77,7 +83,7 @@ class TeacherSerializer(serializers.ModelSerializer):
         ]
         model = api_models.Teacher
 
-
+# review ✅
 class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -85,7 +91,7 @@ class CategorySerializer(serializers.ModelSerializer):
         model = api_models.Category
 
 
-
+# review ✅
 class VariantItemSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -101,7 +107,7 @@ class VariantItemSerializer(serializers.ModelSerializer):
             self.Meta.depth = 3
 
 
-
+# review ✅
 class VariantSerializer(serializers.ModelSerializer):
     variant_items = VariantItemSerializer(many=True)
     items = VariantItemSerializer(many=True)
@@ -121,7 +127,7 @@ class VariantSerializer(serializers.ModelSerializer):
 
 
 
-
+# review ✅
 class Question_Answer_MessageSerializer(serializers.ModelSerializer):
 
     profile = ProfileSerializer(many=False)
@@ -130,7 +136,7 @@ class Question_Answer_MessageSerializer(serializers.ModelSerializer):
         fields = '__all__'
         model = api_models.Question_Answer_Message
 
-
+# review ✅
 class Question_AnswerSerializer(serializers.ModelSerializer):
     messages = Question_Answer_MessageSerializer(many=True)
     profile = ProfileSerializer(many=False)
@@ -140,7 +146,7 @@ class Question_AnswerSerializer(serializers.ModelSerializer):
         model = api_models.Question_Answer
 
 
-
+# review ✅
 class CartSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -156,7 +162,7 @@ class CartSerializer(serializers.ModelSerializer):
         else:
             self.Meta.depth = 3
 
-
+# review ✅
 class CartOrderItemSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -171,7 +177,7 @@ class CartOrderItemSerializer(serializers.ModelSerializer):
         else:
             self.Meta.depth = 3
 
-
+# review ✅
 class CartOrderSerializer(serializers.ModelSerializer):
     order_items = CartOrderItemSerializer(many=True)
 
@@ -187,18 +193,14 @@ class CartOrderSerializer(serializers.ModelSerializer):
         else:
             self.Meta.depth = 3
 
-
-
-
-
-
+# review ✅
 class CertificateSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = '__all__'
         model = api_models.Certificate
         
-
+# review ✅
 class CompletedLessonSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -213,13 +215,14 @@ class CompletedLessonSerializer(serializers.ModelSerializer):
         else:
             self.Meta.depth = 3
 
-
+# review ✅
 class NoteSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = '__all__'
         model = api_models.Note
 
+# review ✅
 class ReviewSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer(many=False)
 
@@ -234,6 +237,7 @@ class ReviewSerializer(serializers.ModelSerializer):
             self.Meta.depth = 0
         else:
             self.Meta.depth = 3
+
 
 class NotificationSerializer(serializers.ModelSerializer):
 
@@ -250,7 +254,7 @@ class CouponSerializer(serializers.ModelSerializer):
 
 
 
-class WishListSerializer(serializers.ModelSerializer):
+class WishlistSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = '__all__'
@@ -287,6 +291,14 @@ class EnrolledCourseSerializer(serializers.ModelSerializer):
         fields = '__all__'
         model = api_models.EnrolledCourse
 
+    def __init__(self, *args, **kwargs):
+        super(EnrolledCourseSerializer, self).__init__(*args, **kwargs)
+        request = self.context.get("request")
+        if request and request.method == "POST":
+            self.Meta.depth = 0
+        else:
+            self.Meta.depth = 3
+
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -321,6 +333,7 @@ class CourseSerializer(serializers.ModelSerializer):
             "reviews",
         ]
         model = api_models.Course
+
     
     def __init__(self, *args, **kwargs):
         super(CourseSerializer, self).__init__(*args, **kwargs)

@@ -138,7 +138,7 @@ AUTH_USER_MODEL = 'userauths.User'
 
 
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
-STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY")
+# STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY")
 
 # PAYPAL_CLIENT_ID = env("PAYPAL_CLIENT_ID")
  
@@ -211,6 +211,15 @@ JAZZMIN_UI_TWEAKS = {
     }
 }
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        
+        'rest_framework_simplejwt.authentication.JWTAuthentication',        
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
